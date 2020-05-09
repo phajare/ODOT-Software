@@ -17,6 +17,8 @@
 		<property name="url" value="${db.url}" />
 		<property name="username" value="${db.username}" />
 		<property name="password" value="${db.password}" />
+		<property name="port" value="${db.port}" />
+		<property name="name" value="${db.name}" />
 	</bean>
 </beans>
 
