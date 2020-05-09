@@ -1,13 +1,15 @@
 package edu.okstate.executables;
 
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
-import edu.okstate.entities.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+
 import org.hibernate.query.Query;
+
+import edu.okstate.entities.Log;
 
 
 public class SelectProject {
@@ -38,8 +40,8 @@ public class SelectProject {
 					headerDetails.add((String)employee[i]);
 				}
 			}
-			System.out.println(headerDetails);
-			System.out.println("Done!");
+			new Log();
+			Log.printLog().log(Level.INFO, "Selected Project Details:\n"+headerDetails);
 
 		}finally {
 			session.close();

@@ -1,6 +1,7 @@
 package edu.okstate.executables;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -23,20 +24,15 @@ public class SaveFullRecord {
 
         try {
 
-            System.out.println("Details arrived in SaveFullRecord\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
+        	Log.printLog().log(Level.INFO, "Details arrived in SAVE FULL RECORD!!!");
 
             session.beginTransaction();
-            for (ProjectDataFull proData : list) {
-                //System.out.println(proData);
+            for (ProjectDataFull proData : list)
                 session.save(proData);
-
-            }
-
-            System.out.println("SaveFullRecord FOR LOOP OVER\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\");
 
             session.getTransaction().commit();
 
-            System.out.println("Done!");
+            Log.printLog().log(Level.INFO, "Save full record SUCCESSFULL!!!");
 
         }finally {
             session.close();

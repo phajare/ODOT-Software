@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import edu.okstate.entities.*;
 import java.util.List;
+import java.util.logging.Level;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -26,29 +27,20 @@ public class CopyFullRecord {
         Configuration config = ContextConfig.getConfig();
         SessionFactory factory = config.buildSessionFactory();
         
-		/*
-		 * SessionFactory abc = new Configuration(). configure("hibernate.cfg.xml").
-		 * addAnnotatedClass(ProjectHeaderData.class).
-		 * addAnnotatedClass(CompoundKeyProData.class).
-		 * addAnnotatedClass(ProjectDataFull.class).
-		 * addAnnotatedClass(TemplateHeaderData.class).
-		 * addAnnotatedClass(TemplateData.class).
-		 * addAnnotatedClass(CompoundKeyTempData.class). buildSessionFactory();
-		 */
-        // create session
         Session session = factory.getCurrentSession();
 
         try {
 
             session.beginTransaction();
 
-            headerDetails = session.createQuery("from ProjectHeaderData p where p.description = :choice").setParameter("choice", choice).list();
+            headerDetails = session.createQuery("from ProjectHeaderData p where p.description = :choice")
+            		.setParameter("choice", choice).list();
 
             int templateId = headerDetails.get(0).getTemplateId().getId();
             int projectId = headerDetails.get(0).getId();
             
-            projectDataFulls = session.createQuery("from ProjectDataFull p where p.compound.proHeaderDataId.id = :projectId").setParameter("projectId", projectId).list();
-            //ProjectDataFull toCopyProjectDataFull = new ProjectDataFull();
+            projectDataFulls = session.createQuery("from ProjectDataFull p where p.compound.proHeaderDataId.id = :projectId")
+            		.setParameter("projectId", projectId).list();
 
             TemplateHeaderData tempheader = new TemplateHeaderData();
             tempheader.setId(templateId);
@@ -65,7 +57,8 @@ public class CopyFullRecord {
             compoundData.setProHeaderDataId(proheader);
 
             //session.beginTransaction();
-            System.out.println("Data is getting saved:\n");
+            new Log();
+        	Log.printLog().log(Level.INFO, "Data getting saved...\n");
             session.save(proheader);
 
             ArrayList<Integer> rows = new ArrayList<Integer>();
@@ -92,7 +85,8 @@ public class CopyFullRecord {
             actParent = (ArrayList<Integer>) session.createQuery("select parent from TemplateData t where t.compound.tempHeaderDataId.id = :templateId").setParameter("templateId", templateId).list();
 
             int max = Collections.max(rows);
-            System.out.println("The maximum no. of rows in the column of the table are: " + max);
+            new Log();
+        	Log.printLog().log(Level.INFO, "The maximum no. of rows in the column of the table are: " + max);
 
             for (int i = 1; i <= max; i++) {
                 CompoundKeyTempData compoundTemp1 = new CompoundKeyTempData();
@@ -108,7 +102,6 @@ public class CopyFullRecord {
                 } else {
                     proData1.setAvgProdRate(avgProd.get(i - 1));
                 }
-                System.out.println("THE VALUE RECIEVED FOR avgProd:::::::::::::::::::::" + avgProd.get(i - 1));
                 proData1.setComments(projectDataFulls.get(i-1).getComments());
                 proData1.setDuration(projectDataFulls.get(i-1).getDuration());
                 proData1.setDurationOverride(projectDataFulls.get(i-1).getDurationOverride());
@@ -117,20 +110,17 @@ public class CopyFullRecord {
                 } else {
                     proData1.setMaxProdRate(maxProd.get(i - 1));
                 }
-                //System.out.println("THE VALUE RECIEVED FOR maxProd:::::::::::::::::::::" + maxProd.get(i - 1));
                 if (minProd.get(i - 1) == null) {
                     proData1.setMinProdRate(0);
                 } else {
                     proData1.setMinProdRate(minProd.get(i - 1));
                 }
-                //System.out.println("THE VALUE RECIEVED FOR maxProd:::::::::::::::::::::" + minProd.get(i - 1));
                 proData1.setQuantity(projectDataFulls.get(i-1).getQuantity());
                 if (actPred.get(i - 1) == null) {
                     proData1.setTaskPredecessor("");
                 } else {
                     proData1.setTaskPredecessor(actPred.get(i - 1));
                 }
-                //System.out.println("THE VALUE RECIEVED FOR actPred:::::::::::::::::::::" + actPred.get(i - 1));
                 proData1.setTechDetails(projectDataFulls.get(i-1).getTechDetails());
                 if (actName.get(i - 1) == null) {
                     proData1.setActivityName("");
@@ -157,11 +147,10 @@ public class CopyFullRecord {
                 } else {
                     proData1.setActivityParent(actParent.get(i - 1));
                 }
-                System.out.println("Data is getting savedddddddddddddddddddddddddddddddddddddddddddd:\n");
-                System.out.println(proData1);
+            	Log.printLog().log(Level.INFO, "Data getting saved...\n" + proData1);
                 session.save(proData1);
             }
-            System.out.println("proheader.getId(): " + proheader.getId());
+        	Log.printLog().log(Level.INFO, "Project Header ID: " + proheader.getId());
 
             headerID = proheader.getId();
 
@@ -193,13 +182,13 @@ public class CopyFullRecord {
             proheader.setDate(date);
             proheader.setRef(ref);
             proheader.setSta(sta);
-
-            System.out.println("Updated data is getting saved in project header data\n");
+            
+            Log.printLog().log(Level.INFO, "Updated data is getting saved in project header data...");
             session.save(proheader);
 
             session.getTransaction().commit();
 
-            System.out.println("Done!");
+            Log.printLog().log(Level.INFO, "Updated data saved in project header data!!!");
 
         } finally {
             session.close();

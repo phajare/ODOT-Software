@@ -6,6 +6,8 @@ import org.hibernate.cfg.Configuration;
 
 import edu.okstate.entities.*;
 import java.util.List;
+import java.util.logging.Level;
+
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.hibernate.query.Query;
@@ -44,11 +46,10 @@ public class UpdateProjectHeader {
             query.setParameter("targetId", targetId);
 
             int result = query.executeUpdate();
-
-            System.out.println("query execution return value: " + result);
+            Log.printLog().log(Level.INFO, "Query Execution return value: " + result);
 
             session.getTransaction().commit();
-            System.out.println("Done!");
+            Log.printLog().log(Level.INFO, "Update project SUCCESSFULL!!!");
 
         } catch (java.lang.IndexOutOfBoundsException ex) {
             javax.swing.JFrame frame;

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package edu.okstate.executables;
 
 import java.io.FileNotFoundException;
@@ -13,6 +8,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.ss.usermodel.Cell;
@@ -20,26 +17,19 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import edu.okstate.entities.Log;
  
-/**
- * A simple Java program that exports data from database to Excel file.
- * @author Nam Ha Minh
- * (C) Copyright codejava.net
- */
-public class AdvancedDb2ExcelExporter {
+public class ExportProject {
  
     public static String goToExport(int description, String project_name) throws FileNotFoundException, IOException, InvalidFormatException {
-        return new AdvancedDb2ExcelExporter().export(description, project_name);
+        return new ExportProject().export(description, project_name);
     }
      
     public String export(int description, String project_name) throws FileNotFoundException, IOException, InvalidFormatException {
     	
-    	//FileReader reader = new FileReader("config.properties");
-    		
-    	//Properties properties = new Properties();
-    	//properties.load(reader);
-    	
-    	ClassPathXmlApplicationContext context = 
+    	@SuppressWarnings("resource")
+		ClassPathXmlApplicationContext context = 
 				new ClassPathXmlApplicationContext("applicationContext.xml");
 		
 		DatabaseDetails db = context.getBean("myDatabseDetails", DatabaseDetails.class);
@@ -48,20 +38,15 @@ public class AdvancedDb2ExcelExporter {
         String username = db.getUsername();
         String password = db.getPassword();
         
-        //Date date = java.util.Calendar.getInstance().getTime();
         String date = java.time.LocalTime.now().toString().substring(0, 8).replace(":", "");
-        //String now = date.substring(0, 7).replace(":", "");
         String user = System.getProperty("user.name");
         String docs = "C:\\Users\\"+user+"\\Documents\\";
         String excelFilePath = docs + project_name +"_"+ date +"-export.xlsx";
  
         try (Connection connection = DriverManager.getConnection(jdbcURL, username, password)) {
-            String sql = "SELECT Project_ID, Template_Activity_Name, Activity_Duration, Activity_Task_Predecessor_Logic FROM project_data_full where Project_ID="
-        +description+" AND Template_Activity_Child = 0";
-        	
-        	//String sql = "SELECT Project_ID, Template_Activity_Name, Activity_Duration, Activity_Task_Predecessor_Logic FROM project_data_full where Project_ID="
-        	  //      +description;
-            ///ODOT-Software/src/main/java/edu/okstate/executables/program.vbs
+            String sql = "SELECT Project_ID, Template_Activity_Name, Activity_Duration, "
+            		+ "Activity_Task_Predecessor_Logic FROM project_data_full where Project_ID="
+            		+ description + " AND Template_Activity_Child = 0";
  
             Statement statement = connection.createStatement();
  
@@ -79,8 +64,6 @@ public class AdvancedDb2ExcelExporter {
             try {
 				workbook.write(outputStream);
 			} catch (Exception e) {
-				
-				// TODO Auto-generated catch block
 				pack = OPCPackage.open(excelFilePath);
 			}
             outputStream.close();
@@ -90,15 +73,14 @@ public class AdvancedDb2ExcelExporter {
             
             if(pack != null)
             	pack.close();
-            //File file = new File(excelFilePath);
-            //file.setReadable(true);
-            //file.setWritable(true);
- 
+
         } catch (SQLException e) {
-            System.out.println("Datababse error:");
-            e.printStackTrace();
+        	new Log();
+        	Log.printLog().log(Level.SEVERE, "SQL Exception raised:\n");
+        	e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("File IO error:");
+        	new Log();
+        	Log.printLog().log(Level.SEVERE, "IO Exception raised:\n");
             e.printStackTrace();
         }
         
@@ -149,5 +131,4 @@ public class AdvancedDb2ExcelExporter {
             cell.setCellValue(predecessors);
         }
     }
- 
 }

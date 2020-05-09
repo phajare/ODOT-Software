@@ -1,6 +1,8 @@
 package edu.okstate.executables;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -134,7 +136,7 @@ public class ProjectSearch {
 
             session.getTransaction().commit();
 
-            System.out.println("Done!");
+            Log.printLog().log(Level.SEVERE, "Search Project SUCCESSFULL!!!");
 
         } catch (Exception exc) {
             javax.swing.JFrame frame;

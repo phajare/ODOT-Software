@@ -1,6 +1,7 @@
 package edu.okstate.executables;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -15,7 +16,8 @@ public class DeleteCompleteRecord {
 
     static int headerID;
 
-    public static void deleteCompleteRecord(String choice) {
+    @SuppressWarnings("unchecked")
+	public static void deleteCompleteRecord(String choice) {
         int projectId;
         List<ProjectHeaderData> headerDetails;
         // create session factory
@@ -28,7 +30,8 @@ public class DeleteCompleteRecord {
 
             session.beginTransaction();
 
-            headerDetails = session.createQuery("from ProjectHeaderData p where p.description = :choice").setParameter("choice", choice).list();
+            headerDetails = session.createQuery("from ProjectHeaderData p where p.description = :choice")
+            		.setParameter("choice", choice).list();
 
             projectId = headerDetails.get(0).getId();
 
@@ -36,13 +39,14 @@ public class DeleteCompleteRecord {
             Query query1 = session.createQuery("delete ProjectHeaderData p where p.id = :projectId");
             query1.setParameter("projectId", projectId);
             int result1 = query1.executeUpdate();
-            System.out.println("DELETE QUERY EXECUTION RESULT " + result1);
-            Query query = session.createQuery("delete ProjectDataFull p where p.compound.proHeaderDataId.id = :projectId");
+            Log.printLog().log(Level.INFO, "DELETE QUERY EXECUTION RESULT " + result1);
+            @SuppressWarnings("rawtypes")
+			Query query = session.createQuery("delete ProjectDataFull p where p.compound.proHeaderDataId.id = :projectId");
             query.setParameter("projectId", projectId);
             int result = query.executeUpdate();
-            System.out.println("DELETE PROJECTFULLDATA QUERY EXECUTION RESULT " + result);
+            Log.printLog().log(Level.INFO, "DELETE PROJECTFULLDATA QUERY EXECUTION RESULT " + result);
             session.getTransaction().commit();
-            System.out.println("Done!");
+            Log.printLog().log(Level.INFO, "DELETED SUCCESSFULLY!!!");
 
         } finally {
             session.close();

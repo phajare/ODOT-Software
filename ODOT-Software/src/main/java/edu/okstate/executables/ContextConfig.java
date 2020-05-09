@@ -12,6 +12,7 @@ import edu.okstate.entities.TemplateHeaderData;
 public class ContextConfig {
 	
 	public static Configuration getConfig() {
+		@SuppressWarnings("resource")
 		ClassPathXmlApplicationContext context = 
 				new ClassPathXmlApplicationContext("applicationContext.xml");
 		
