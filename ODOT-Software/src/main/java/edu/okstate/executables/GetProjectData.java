@@ -7,13 +7,14 @@ import org.hibernate.cfg.Configuration;
 
 import edu.okstate.entities.*;
 import java.util.List;
+import java.util.logging.Level;
 
 
 public class GetProjectData {
 
 	@SuppressWarnings("unchecked")
 	public static List<ProjectDataFull> getProjectData(String choice) {
-		//System.out.println("recieved choice is::::::::::::::::::::::::::::::::::::::::::::::::::::::::: "+choice);
+		
 		List<ProjectHeaderData> headerDetails;
 		List<ProjectDataFull> projectDetails;
 
@@ -27,24 +28,21 @@ public class GetProjectData {
 			session.beginTransaction();
 			headerDetails = session.createQuery("from ProjectHeaderData p where p.description = :choice").setParameter("choice", choice).list();
 			int projectID = headerDetails.get(0).getId();
-			System.out.println("ID from get Project Data.................................................."+projectID);
+			Log.printLog().log(Level.INFO, "Project ID: " + projectID);
 			int templateID = headerDetails.get(0).getTemplateId().getId();
-			System.out.println("ID from get Template Header.................................................."+templateID);
-
+			Log.printLog().log(Level.INFO, "Template ID: " + templateID);
 
 			projectDetails = session.createQuery("from ProjectDataFull p where p.compound.proHeaderDataId.id = :projectID").setParameter("projectID", projectID).list();
 
 			if(projectDetails.isEmpty())
-				System.out.println("ProjectDetails List came from ProjectDataAll is empty+++++++++++++++++++++++++++++++++++++++++++");
+				Log.printLog().log(Level.SEVERE, "ProjectDetails List Arrived from ProjectDataAll is EMPTY!!!");
 
 			session.getTransaction().commit();
-			System.out.println("Done!");
-
+			Log.printLog().log(Level.SEVERE, "GetProjectData SUCCESSFULL!!!");
 		}finally {
 			session.close();
 			factory.close();
 		}
-
 		return projectDetails;
 	}
 }

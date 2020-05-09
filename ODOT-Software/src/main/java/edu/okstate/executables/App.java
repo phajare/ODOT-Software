@@ -2,22 +2,17 @@ package edu.okstate.executables;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.logging.Level;
+
+import edu.okstate.entities.Log;
 import edu.okstate.frames.PrHeaderFrame;
 
-/**
- * Hello world!
- *
- */
+
 public class App 
 {
-    public static void main( String[] args ) throws FileNotFoundException, IOException
-    {
-        System.out.println( "---------------- WELCOME!!! ------------------" );
-        
-        
-        //AdvancedDb2ExcelExporter2 a = new AdvancedDb2ExcelExporter2();
-        //a.export(17);
-        PrHeaderFrame.prHeaderMain();
-        //10.227.249.248
+    public static void main( String[] args ) throws FileNotFoundException, IOException{
+    	new Log();
+		Log.printLog().log(Level.INFO, "Application Launched Successfully!!!");
+    	PrHeaderFrame.prHeaderMain();
     }
 }

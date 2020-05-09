@@ -1,6 +1,7 @@
 package edu.okstate.executables;
 
 import java.util.List;
+import java.util.logging.Level;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -31,9 +32,9 @@ public class DeleteFullRecord {
 			Query query = session.createQuery("delete ProjectDataFull p where p.compound.proHeaderDataId.id = :projectId");
 			query.setParameter("projectId",projectId);
 			int result = query.executeUpdate();
-			System.out.println("DELETE QUERY EXECUTION RESULT "+result);
+			Log.printLog().log(Level.INFO, "DELETE QUERY EXECUTION RESULT "+result);
 			session.getTransaction().commit();
-			System.out.println("Done!");
+			Log.printLog().log(Level.INFO, "DELETED SUCCESSFULLY!!!");
 
 		} finally {
 			session.close();

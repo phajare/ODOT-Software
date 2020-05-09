@@ -6,7 +6,7 @@
 package edu.okstate.frames;
 
 import edu.okstate.entities.ProjectDataFull;
-import edu.okstate.executables.AdvancedDb2ExcelExporter;
+import edu.okstate.executables.ExportProject;
 import edu.okstate.executables.IntegrationTemplate;
 import edu.okstate.executables.ProjectSearch;
 import edu.okstate.executables.SelectProject;
@@ -27,13 +27,16 @@ import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
  *
  * @author CIVE Administrator
  */
+@SuppressWarnings("serial")
 public class PrHeaderFrame extends javax.swing.JFrame {
 
     private int projectHeaderID;
-    private Object Jlist2;
+    @SuppressWarnings("unused")
+	private Object Jlist2;
     List<ProjectDataFull> projectDataFull;
     //MODEL
-    DefaultListModel templatesModel = new DefaultListModel();
+    @SuppressWarnings("rawtypes")
+	DefaultListModel templatesModel = new DefaultListModel();
 
     /**
      * Creates new form WelFrame
@@ -48,7 +51,8 @@ public class PrHeaderFrame extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage("C:\\CPM-Software\\src\\main\\resources\\odot.png"));
     }
 
-    private void add(String name) {
+    @SuppressWarnings("unchecked")
+	private void add(String name) {
 
         projectDescriptionList.setModel(templatesModel);
         projectDescriptionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -61,11 +65,8 @@ public class PrHeaderFrame extends javax.swing.JFrame {
         ArrayList<String> templateNames = new ArrayList<String>();
 
         templateNames = IntegrationTemplate.returnTempalteHeaders(2);
-        System.out.println("\n\n\n1st element in the list is SIZEEEE:" + templateNames.get(0) + "\n\n\n");
-        //jTextField1.setText(templateNames.get(0));
-        for (String name : templateNames) {
-            add(name);
-        }
+        for (String name : templateNames)
+        	add(name);
     }
 
     private void addElementsToProjectsList(String a, String b, String c, String d, String e, String f, String g, String h, String i) {
@@ -78,7 +79,6 @@ public class PrHeaderFrame extends javax.swing.JFrame {
         for (String name : templateNames) {
             add(name);
         }
-
     }
 
     /**
@@ -622,9 +622,6 @@ public class PrHeaderFrame extends javax.swing.JFrame {
 	}                                        
 
 	private void listAllProjectsActionPerformed(java.awt.event.ActionEvent evt) {                                                
-            // TODO add your handling code here:
-            //XmlParser parser = new XmlParser();
-            //parser.printXml();
             clearAllFields();
             try {
                 addElementsToTemplateList();
@@ -740,7 +737,7 @@ public class PrHeaderFrame extends javax.swing.JFrame {
         String selected = (String) projectDescriptionList.getSelectedValue();
         projectDataFull = GetProjectData.getProjectData(selected);
         int gotId = projectDataFull.get(0).getCompound().getProHeaderDataId().getId();
-        String excelFilePath = AdvancedDb2ExcelExporter.goToExport(gotId, selected);
+        String excelFilePath = ExportProject.goToExport(gotId, selected);
         exportButton.setEnabled(false);
         javax.swing.JFrame frame;
         frame = new JFrame("Information");
