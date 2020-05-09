@@ -20,7 +20,7 @@ public class ContextConfig {
 		Configuration config = new Configuration();
 		
         config.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
-        config.setProperty("hibernate.connection.url", "jdbc:mysql://"+db.getUrl()+":3306/stepbystep?allowPublicKeyRetrieval=TRUE");
+        config.setProperty("hibernate.connection.url", "jdbc:mysql://"+db.getUrl()+":"+db.getPort() +"/"+db.getName()+"?allowPublicKeyRetrieval=TRUE");
         config.setProperty("hibernate.connection.username", db.getUsername());
         config.setProperty("hibernate.connection.password", db.getPassword());
         config.setProperty("hibernate.connection.pool_size", "1");

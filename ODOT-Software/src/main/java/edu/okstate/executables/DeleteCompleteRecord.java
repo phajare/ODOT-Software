@@ -7,13 +7,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import edu.okstate.entities.*;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
 import org.hibernate.query.Query;
 
 public class DeleteCompleteRecord {
-
+	
     static int headerID;
 
     @SuppressWarnings("unchecked")

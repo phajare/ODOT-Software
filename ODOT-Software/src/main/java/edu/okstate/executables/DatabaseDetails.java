@@ -3,12 +3,27 @@ package edu.okstate.executables;
 public class DatabaseDetails {
 	String driver;
 	String url;
+	String port;
 	String username;
 	String password;
+	String name;
 	String pool_size;
 	String dialect;
 	String show_sql;
 	String current_session;
+	
+	public String getPort() {
+		return port;
+	}
+	public void setPort(String port) {
+		this.port = port;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
 	public String getDriver() {
 		return driver;
 	}
@@ -59,8 +74,8 @@ public class DatabaseDetails {
 	}
 	@Override
 	public String toString() {
-		return "DatabaseDetails [driver=" + driver + ", url=" + url + ", username=" + username + ", password="
-				+ password + ", pool_size=" + pool_size + ", dialect=" + dialect + ", show_sql=" + show_sql
-				+ ", current_session=" + current_session + "]";
+		return "DatabaseDetails [driver=" + driver + ", url=" + url + ", port=" + port + ", username=" + username
+				+ ", password=" + password + ", name=" + name + ", pool_size=" + pool_size + ", dialect=" + dialect
+				+ ", show_sql=" + show_sql + ", current_session=" + current_session + "]";
 	}
 }
