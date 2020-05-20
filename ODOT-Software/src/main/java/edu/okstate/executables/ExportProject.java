@@ -44,7 +44,7 @@ public class ExportProject {
         String excelFilePath = docs + project_name +"_"+ date +"-export.xlsx";
  
         try (Connection connection = DriverManager.getConnection(jdbcURL, username, password)) {
-            String sql = "SELECT Project_ID, Template_Activity_Name, Activity_Duration, "
+            String sql = "SELECT Project_ID, Template_Activity_Name, Activity_Duration, Activity_Duration_Override, "
             		+ "Activity_Task_Predecessor_Logic FROM project_data_full where Project_ID="
             		+ description + " AND Template_Activity_Child = 0";
  
@@ -113,6 +113,7 @@ public class ExportProject {
             String taskMode = "Auto Schedule";
             String taskName = result.getString("Template_Activity_Name");
             String duration = Double.toString(result.getDouble("Activity_Duration"));
+            String duration_override = Double.toString(result.getDouble("Activity_Duration_Override"));
             String predecessors = result.getString("Activity_Task_PredecesSor_Logic");
  
             Row row = sheet.createRow(rowCount++);
@@ -125,7 +126,10 @@ public class ExportProject {
             cell.setCellValue(taskName);
  
             cell = row.createCell(columnCount++);
-            cell.setCellValue(duration);
+            if(!duration_override.equals("0.0"))
+            	cell.setCellValue(duration_override);
+            else
+            	cell.setCellValue(duration);
  
             cell = row.createCell(columnCount++);
             cell.setCellValue(predecessors);

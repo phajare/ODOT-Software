@@ -747,7 +747,8 @@ public class PrHeaderFrame extends javax.swing.JFrame {
         if (JOptionPane.showConfirmDialog(frame, "EXPORTED successfully!\nContinue to Microsoft Project?", "Success!", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_NO_OPTION) {
         	Thread.sleep(2000);
             try {
-            	Runtime.getRuntime().exec( "wscript C:\\CPM-Software\\target\\classes\\edu\\okstate\\executables\\program.vbs " + excelFilePath);
+            	Runtime.getRuntime().exec( "wscript C:\\Users\\apampan\\git\\ODOT-Software\\ODOT-Software\\target\\classes\\edu\\okstate\\executables\\program.vbs " + excelFilePath);
+            	//C:\Users\apampan\git\ODOT-Software\ODOT-Software
             }catch(Exception e){
             	e.printStackTrace();
             }

@@ -1,0 +1,9 @@
+MPX,Microsoft Project for Windows,4.0,ANSI
+10,$,1,2,",",.
+11,2,0,1,8.00,40.00,$10.00/h,$15.00/h,1,0
+12,1,0,480,/,:,am,pm,20,20
+30,Project1,,,Standard,,,0,17/05/2020,,$0.00,$0.00,$0.00,0h,0h,0h,0%,0d,0d,0d,0%,,,,,0d,0d
+60,Name,WBS,Outline Level,Duration,Predecessors,Fixed,ID,Constraint Type,Unique ID,Outline Number
+61,1,2,3,40,70,80,90,91,98,99
+70,Waste of time,1,1,5d,,No,1,As Soon As Possible,1,1
+70,Dance,2,1,10d,1FS+5d,No,2,As Soon As Possible,2,2
